@@ -5,6 +5,8 @@ var ctx = canvas.getContext('2d');
 var width = canvas.width;
 var height = canvas.height;
 
+var x = 150;
+var y = 20;
 // рисуем круг
 var circle = function(x,y, rad, isFill) {
    ctx.beginPath();
@@ -217,12 +219,53 @@ var drawEnter = function() {
 
 };
 
+// hero
 
+var directions = {
+   37: 'left',
+   38: 'up',
+   39: 'right',
+   40: 'down'
+};
+
+
+
+var Hero = function() {
+   this.segments = new Block(15,blockSize);
+
+}
+
+Hero.prototype.move = function(direction) {
+   if (direction === 'down') {
+      ctx.clearRect(0,0,width,height);
+      topWall.draw();
+   botWall.draw();
+   longWall.draw();
+   hero.drawHero(x,y+10);
+   hero.move();
+   drawBorder();
+   drawEnter();
+   }
+};
+$('body').keydown(function (event) {
+   var newDirection = directions[event.keyCode];
+   if (newDirection !== undefined) {
+      hero.move(newDirection);
+   }
+});
+
+Hero.prototype.drawHero = function(x,y){
+   ctx.fillStyle = 'red';
+   circle(x,y,blockSize,true)
+};
+var hero = new Hero();
 
 
 topWall.draw();
 botWall.draw();
 longWall.draw();
+hero.drawHero(x,y);
+hero.move();
 drawBorder();
 drawEnter();
 
